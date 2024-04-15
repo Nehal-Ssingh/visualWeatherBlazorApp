@@ -1,5 +1,8 @@
 ﻿@page "/"
 
+@inject IConfiguration Configuration
+@* allows you to access the code in appsettings.json for the api key and the api host *@
+
 <PageTitle>Index</PageTitle>
 
 <button @onclick="GetWeather">Get Weather</button>
@@ -13,15 +16,19 @@
 
     public async Task GetWeather()
     {
+        var apiKey = Configuration["WeatherApi:ApiKey"];
+        var apiHost = Configuration["WeatherApi:ApiHost"];
+        //api key and api host moved to appsettings.json
+
         var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://visual-crossing-weather.p.rapidapi.com/history?startDateTime=2019-01-01T00%3A00%3A00&aggregateHours=24&location=Washington%2CDC%2CUSA&endDateTime=2019-01-03T00%3A00%3A00&unitGroup=us&dayStartTime=8%3A00%3A00&contentType=csv&dayEndTime=17%3A00%3A00&shortColumnNames=0"),
                 Headers =
-    {
-        { "X-RapidAPI-Key", "608e3cb2aemsh15488665c413753p17d256jsne32315ef42ad" },
-        { "X-RapidAPI-Host", "visual-crossing-weather.p.rapidapi.com" },
-    },
+      {
+            { "X-RapidAPI-Key", apiKey },
+            { "X-RapidAPI-Host", apiHost },
+        },
             };
 
         try
